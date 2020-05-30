@@ -1,25 +1,41 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { ErrorMessage, Formik, Form, Field } from 'formik';
+import * as yup from 'yup';
+
 
 function App() {
+
+  function handleSubmit(values) {
+    alert(JSON.stringify(values))
+  }
+
+  const initialValues = {
+    user: "",
+    password: ""
+  }
+
+  const validations = yup.object().shape({
+    user: yup.string().required(),
+    password: yup.string().min(8).required()
+  });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Formik initialValues={initialValues} onSubmit={(handleSubmit)} validationSchema={validations}>
+      <Form>
+        <div className="form-group">
+          <Field type="text" placeholder="User" name="user" />
+          <ErrorMessage component="span" name="user" />
+        </div>
+        <div className="form-group">
+          <Field type="password" placeholder="Password" name="password" />
+          <ErrorMessage component="span" name="password" />
+        </div>
+        <div className="form-group">
+          <Field type="submit" value="Login"></Field>
+        </div>
+      </Form>
+    </Formik>
   );
 }
 
